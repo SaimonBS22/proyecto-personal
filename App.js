@@ -23,11 +23,14 @@ export default function App() {
     ]}>
       <Text style={styles.texto}>Carrito</Text>
     </Pressable>
-    <StatusBar style='light' />
   </View>
   <View style={styles.containerPlatos}>
+  <>
+  <Text style={styles.titulo}>Bienvenidos a Lo de Fac</Text>
+  </>
     <Image source={entraña} style={styles.imagenComida}></Image>
   </View>
+   <StatusBar style='light' />
   </SafeAreaView>
   )
 }
@@ -80,5 +83,7 @@ const styles = StyleSheet.create({
     width:150,
     height:175,
     borderRadius:10
+  },
+  titulo:{
   }
 });
