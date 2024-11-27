@@ -3,6 +3,10 @@
 
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, Image, ScrollView, Pressable, SafeAreaView} from "react-native"
+import { useState, useEffect } from "react";
+import { getItems } from "./firebase/db";
+import { collection, getDocs } from "firebase/firestore";
+import db from "./firebase/config";
 
 const header = require('./imagenes/header.jpg')
 const logo = require('./imagenes/logo.jpg')
@@ -10,6 +14,18 @@ const entraña = require('./imagenes/entraña.jpg')
 
 
 export default function App() {
+  const [items, setItems] = useState([])
+
+  useEffect(() => {
+      const fetch =async() => {
+        const colref = collection(db, 'Menu')
+        const snapshot = getDocs(colref)
+        const docs = (await snapshot).docs.map((doc)=>doc.data())
+        console.log(docs)
+        setItems(docs)
+      }
+      fetch()
+  },[])
   return(
   <SafeAreaView style={{backgroundColor: '#ab0d22'}}> 
   <View style={styles.container}>
@@ -24,13 +40,19 @@ export default function App() {
       <Text style={styles.texto}>Carrito</Text>
     </Pressable>
   </View>
+
+
   <View style={styles.containerPlatos}>
   <>
-  <Text style={styles.titulo}>Bienvenidos a Lo de Fac</Text>
+  {items.map(item =>{
+    return <View key={item.id}>
+      <Text style={styles.titulo}>{item.nombre}</Text>
+      <Image style={{ width:100, height:100}}source={item.imagen}></Image>
+    </View>
+  })}
   </>
-    <Image source={entraña} style={styles.imagenComida}></Image>
   </View>
-   <StatusBar style='light' />
+   <StatusBar style='auto' />
   </SafeAreaView>
   )
 }
@@ -85,5 +107,6 @@ const styles = StyleSheet.create({
     borderRadius:10
   },
   titulo:{
+    color:'black'
   }
 });
